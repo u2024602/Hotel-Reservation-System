@@ -3,22 +3,18 @@
 #include <string>
 using namespace std;
 
-// Room types and prices
 int singleroomprice = 60;
 int doubleroomprice = 80;
 int suiteroomprice = 120;
 
-// Maximum room counts
 int maxsinglerooms = 10;
 int maxdoublerooms = 5;
 int maxsuiterooms = 2;
 
-// Room availability
 int availableRooms[3] = {maxsinglerooms, maxdoublerooms, maxsuiterooms};
 
-// Booking information
-string customers[100];         // Store customer names
-int bookingHistory[100][3];    // Customer ID, Room Type, Nights
+string customers[100];       
+int bookingHistory[100][3];    
 int totalCustomers = 0;        
 
 void checkAvailability() { 
@@ -32,11 +28,10 @@ void bookRoom() {
     string name;
     int roomType, nights;
 
-    // Get customer name
+
     cout << "Enter your first name : ";
     cin >> name;
 
-    // Choose room type
     do {
         cout << "Enter room type (1 for Single, 2 for Double, 3 for Suite): ";
         cin >> roomType;
@@ -49,22 +44,21 @@ void bookRoom() {
         }
     } while (roomType < 1 || roomType > 3);
 
-    // Get number of nights
+
     cout << "Enter number of nights: ";
     cin >> nights;
 
-    // Calculate total price
+    
     int price = (roomType == 1 ? singleroomprice : roomType == 2 ? doubleroomprice : suiteroomprice);
     int totalPrice = price * nights;
 
-    // Deduct room from availability
+
     availableRooms[roomType - 1]--;
 
-    // Add to booking history
     customers[totalCustomers] = name;
-    bookingHistory[totalCustomers][0] = totalCustomers + 1; // Customer ID
-    bookingHistory[totalCustomers][1] = roomType;           // Room Type
-    bookingHistory[totalCustomers][2] = nights;            // Nights
+    bookingHistory[totalCustomers][0] = totalCustomers + 1;
+    bookingHistory[totalCustomers][1] = roomType;          
+    bookingHistory[totalCustomers][2] = nights;            
     totalCustomers++;
 
     // Display booking details
@@ -77,40 +71,39 @@ void cancelBooking() {
     cout << "Enter your customer ID to cancel booking: ";
     cin >> customerID;
 
-    // Validate customer ID
     while (customerID <= 0 || customerID > totalCustomers || customers[customerID - 1] == "CANCELLED") {
         cout << "Invalid Customer ID. Please try again: ";
         cin >> customerID;
     }
 
-    // Get room type and update availability
+
     int roomType = bookingHistory[customerID - 1][1];
     availableRooms[roomType - 1]++;
 
-    // Mark customer as cancelled
+    
     customers[customerID - 1] = "CANCELLED";
 
     cout << "Booking has been successfully canceled.\n";
-} //sunaina 
+}
 
 void generateBill() { 
     int customerID;
     cout << "Enter your customer ID to generate the bill: ";
     cin >> customerID;
 
-    // Validate customer ID
+
     while (customerID <= 0 || customerID > totalCustomers || customers[customerID - 1] == "CANCELLED") {
         cout << "Invalid Customer ID. Please try again: ";
         cin >> customerID;
     }
 
-    // Retrieve booking details
+
     int roomType = bookingHistory[customerID - 1][1];
     int nights = bookingHistory[customerID - 1][2];
     int price = (roomType == 1 ? singleroomprice : roomType == 2 ? doubleroomprice : suiteroomprice);
     int totalPrice = price * nights;
 
-    // Display bill
+
     cout << "\n----- Bill -----\n";
     cout << "Customer Name: " << customers[customerID - 1] << "\n";
     cout << "Room Type: " << (roomType == 1 ? "Single" : roomType == 2 ? "Double" : "Suite") << "\n";
